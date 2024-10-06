@@ -1,0 +1,39 @@
+struct AccessDenied {
+}
+
+struct Issued {
+    #indexed
+    pub course: String<18>
+    pub id: u256
+    pub date: String<8>
+}
+
+struct Certificate {
+  pub name: String<24>
+  pub course: String<18>
+  pub grade: String<1>
+  pub date: String<8>
+}
+
+contract Cert {
+    // states
+    admin: address
+    certificates: Map<u256, Certificate>
+
+    // constructor
+    pub fn __init__(mut self, ctx: Context) {
+        self.admin = ctx.msg_sender()
+    }
+
+    // methods
+    pub fn issue_certificate(mut self, ctx: Context, id: u256, name: String<24>, course: String<18>, grade: String<1>, date: String<8>) {
+        if ctx.msg_sender() != self.admin {
+            revert AccessDenied()
+        }
+        self.certificates[id] = Certificate(name, course, grade, date)
+    }
+
+    pub fn fetch_certificate(self, id: u256) -> Certificate {
+        return self.certificates[id].to_mem()
+    }
+}
