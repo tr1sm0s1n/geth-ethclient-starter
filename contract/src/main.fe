@@ -2,7 +2,6 @@ struct AccessDenied {
 }
 
 struct Issued {
-    #indexed
     pub course: String<18>
     pub id: u256
     pub date: String<8>
@@ -26,11 +25,12 @@ contract Cert {
     }
 
     // methods
-    pub fn issue_certificate(mut self, ctx: Context, id: u256, name: String<24>, course: String<18>, grade: String<1>, date: String<8>) {
+    pub fn issue_certificate(mut self, mut ctx: Context, id: u256, name: String<24>, course: String<18>, grade: String<1>, date: String<8>) {
         if ctx.msg_sender() != self.admin {
             revert AccessDenied()
         }
         self.certificates[id] = Certificate(name, course, grade, date)
+        ctx.emit(Issued(course, id, date))
     }
 
     pub fn fetch_certificate(self, id: u256) -> Certificate {
