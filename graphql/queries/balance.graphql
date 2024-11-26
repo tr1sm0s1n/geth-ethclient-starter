@@ -1,0 +1,7 @@
+query balance {
+  block {
+    account(address: "0x29eFc6d3e0f636960aD323CF050Fe0E942Cc4810") {
+      balance
+    }
+  }
+}

@@ -1,0 +1,26 @@
+query receipt {
+  transaction(
+    hash: "0x8db78a69a8adbf7698e0c45d50a94046c45bd46ecb258f96dafa946a4f670420"
+  ) {
+    nonce
+    index
+    from {
+      address
+      balance
+    }
+    to {
+      address
+      balance
+    }
+    value
+    gas
+    gasUsed
+    gasPrice
+    inputData
+    block {
+      number
+      hash
+    }
+    status
+  }
+}

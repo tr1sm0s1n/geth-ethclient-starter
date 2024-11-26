@@ -1,0 +1,21 @@
+query blocks {
+  blocks(from: 0) {
+    hash
+    number
+    transactionsRoot
+    transactionCount
+    stateRoot
+    receiptsRoot
+    gasLimit
+    gasUsed
+    baseFeePerGas
+    nextBaseFeePerGas
+    extraData
+    nonce
+    timestamp
+    blobGasUsed
+    excessBlobGas
+    raw
+    rawHeader
+  }
+}
