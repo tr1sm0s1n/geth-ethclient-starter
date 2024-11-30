@@ -1,0 +1,3 @@
+[submodule "aetherguild"]
+	path = aetherguild
+	url = git@github.com:Kerala-Blockchain-Academy/aetherguild.git
