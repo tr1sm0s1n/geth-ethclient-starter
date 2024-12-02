@@ -1,6 +1,6 @@
 query receipt {
   transaction(
-    hash: "0x8db78a69a8adbf7698e0c45d50a94046c45bd46ecb258f96dafa946a4f670420"
+    hash: "0x104d16927bb396261cc7f304f31a67403222d7bca955d06594a29b418b45d2fa"
   ) {
     nonce
     index
@@ -22,5 +22,8 @@ query receipt {
       hash
     }
     status
+    blobGasUsed
+    blobGasPrice
+    blobVersionedHashes
   }
 }
