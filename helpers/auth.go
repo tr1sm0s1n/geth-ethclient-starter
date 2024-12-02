@@ -11,38 +11,38 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 )
 
-func AuthGenerator(client *ethclient.Client, key string) (*bind.TransactOpts, error) {
+func AuthGenerator(client *ethclient.Client, key string) (*bind.TransactOpts, *ecdsa.PrivateKey, error) {
 	privateKey, err := crypto.HexToECDSA(key[2:])
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	publicKey := privateKey.Public()
 	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
 	if !ok {
-		return nil, errors.New("error casting public key to ECDSA")
+		return nil, nil, errors.New("error casting public key to ECDSA")
 	}
 
 	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
 	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	gasLimit := uint64(927000)
 	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	chainID, err := client.ChainID(context.Background())
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, chainID)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	auth.Nonce = big.NewInt(int64(nonce))
@@ -50,5 +50,5 @@ func AuthGenerator(client *ethclient.Client, key string) (*bind.TransactOpts, er
 	auth.GasLimit = gasLimit
 	auth.GasPrice = gasPrice
 
-	return auth, nil
+	return auth, privateKey, nil
 }
