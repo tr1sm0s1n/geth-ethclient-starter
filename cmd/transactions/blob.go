@@ -65,12 +65,13 @@ func blobTx() {
 	}
 
 	fmt.Printf("Transaction Hash: \033[32m%s\033[0m\n", signedTx.Hash())
+	fmt.Println("-----------------")
 
 	for {
 		r, err := client.TransactionReceipt(context.Background(), signedTx.Hash())
 		if err != nil {
 			if err == ethereum.NotFound {
-				time.Sleep(5 * time.Second)
+				time.Sleep(time.Second)
 				continue
 			} else {
 				panic(err)
@@ -78,12 +79,13 @@ func blobTx() {
 		}
 
 		if r.Status == 1 {
-			fmt.Println("Transaction committed!")
+			fmt.Println("Transaction has been committed!!")
+			fmt.Println("--------------------------------")
 			break
 		}
 
 		fmt.Println("Status not committed")
-		time.Sleep(5 * time.Second)
+		time.Sleep(time.Second)
 	}
 
 	btx, _, err := client.TransactionByHash(context.Background(), signedTx.Hash())

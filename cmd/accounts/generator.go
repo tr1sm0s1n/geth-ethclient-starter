@@ -15,5 +15,7 @@ func main() {
 
 	address := crypto.PubkeyToAddress(key.PublicKey)
 	fmt.Printf("Private Key: \033[32m%s\033[0m\n", hexutil.Encode(crypto.FromECDSA(key)))
-	fmt.Printf("Address: \033[32m%s\033[0m\n", address.String())
+	fmt.Println("------------")
+	fmt.Printf("ETH Address: \033[32m%s\033[0m\n", address.String())
+	fmt.Println("------------")
 }
