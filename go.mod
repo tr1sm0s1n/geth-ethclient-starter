@@ -2,11 +2,14 @@ module example/fe
 
 go 1.23.2
 
-require github.com/ethereum/go-ethereum v1.14.12
+require (
+	github.com/ethereum/go-ethereum v1.14.12
+	github.com/holiman/uint256 v1.3.1
+)
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/bits-and-blooms/bitset v1.16.0 // indirect
+	github.com/bits-and-blooms/bitset v1.17.0 // indirect
 	github.com/consensys/bavard v0.1.22 // indirect
 	github.com/consensys/gnark-crypto v0.14.0 // indirect
 	github.com/crate-crypto/go-ipa v0.0.0-20240724233137-53bbb0ceb27a // indirect
@@ -19,7 +22,6 @@ require (
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
-	github.com/holiman/uint256 v1.3.1 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect
 	github.com/shirou/gopsutil v3.21.11+incompatible // indirect
 	github.com/supranational/blst v0.3.13 // indirect

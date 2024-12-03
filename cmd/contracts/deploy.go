@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	client, err := helpers.DialClient()
+	client, err := helpers.DialClient(false)
 	if err != nil {
 		panic(err)
 	}
