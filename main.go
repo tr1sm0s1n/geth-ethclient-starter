@@ -6,6 +6,7 @@ import (
 	"example/fe/helpers"
 	"fmt"
 	"math/big"
+	"os"
 	"time"
 
 	"github.com/ethereum/go-ethereum"
@@ -13,7 +14,7 @@ import (
 )
 
 var (
-	contractAddress = common.HexToAddress("0x84c1219094f47c1f71998675261AFB9Fb4c889D0")
+	contractAddress = common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
 	id              big.Int
 	certificate     struct {
 		name   string
@@ -29,7 +30,7 @@ func main() {
 		panic(err)
 	}
 
-	auth, _, err := helpers.AuthGenerator(client, "0x2ceea081f9765bc358f9f0ae1cd462b706a8c8ff6eb1897a921ca8f3ef01ce28")
+	auth, _, err := helpers.AuthGenerator(client, os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		panic(err)
 	}

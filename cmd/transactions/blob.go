@@ -4,6 +4,7 @@ import (
 	"context"
 	"example/fe/helpers"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/ethereum/go-ethereum"
@@ -30,7 +31,7 @@ func blobTx() {
 		panic(err)
 	}
 
-	auth, key, err := helpers.AuthGenerator(client, "0xf2ba1eee16a0c60caeafcfad038175b52e79b7b969e5ae0b0913987932b9bf2c")
+	auth, key, err := helpers.AuthGenerator(client, os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		panic(err)
 	}

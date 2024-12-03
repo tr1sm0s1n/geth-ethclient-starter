@@ -4,6 +4,7 @@ import (
 	"example/fe/contract"
 	"example/fe/helpers"
 	"fmt"
+	"os"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -30,7 +31,7 @@ func main() {
 }
 
 func deployContract(client *ethclient.Client) (common.Address, *types.Transaction, error) {
-	auth, _, err := helpers.AuthGenerator(client, "0x2ceea081f9765bc358f9f0ae1cd462b706a8c8ff6eb1897a921ca8f3ef01ce28")
+	auth, _, err := helpers.AuthGenerator(client, os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		return common.Address{}, nil, err
 	}
