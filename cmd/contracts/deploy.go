@@ -1,8 +1,8 @@
 package main
 
 import (
+	"example/fe/contract"
 	"example/fe/helpers"
-	"example/fe/lib"
 	"fmt"
 
 	"github.com/ethereum/go-ethereum/common"
@@ -30,10 +30,10 @@ func main() {
 }
 
 func deployContract(client *ethclient.Client) (common.Address, *types.Transaction, error) {
-	auth, _, err := helpers.AuthGenerator(client, "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80")
+	auth, _, err := helpers.AuthGenerator(client, "0x2ceea081f9765bc358f9f0ae1cd462b706a8c8ff6eb1897a921ca8f3ef01ce28")
 	if err != nil {
 		return common.Address{}, nil, err
 	}
-	contract, transaction, _, err := lib.DeployCert(auth, client)
+	contract, transaction, _, err := contract.DeployCert(auth, client)
 	return contract, transaction, err
 }
