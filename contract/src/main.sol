@@ -18,7 +18,7 @@ contract Cert {
         admin = msg.sender;
     }
 
-    function issue_cerificate(
+    function issue_certificate(
         uint256 _id,
         string memory _name,
         string memory _course,
