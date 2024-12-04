@@ -2,12 +2,15 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"example/fe/contract"
 	"example/fe/helpers"
 	"fmt"
+	"math/big"
 	"os"
+	"strings"
 
 	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 )
@@ -19,8 +22,14 @@ func main() {
 	}
 
 	contractAddress := common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
+
 	query := ethereum.FilterQuery{
 		Addresses: []common.Address{contractAddress},
+	}
+
+	certABI, err := abi.JSON(strings.NewReader(contract.CertMetaData.ABI))
+	if err != nil {
+		panic(err)
 	}
 
 	logs := make(chan types.Log)
@@ -37,8 +46,21 @@ func main() {
 		case err := <-sub.Err():
 			panic(err)
 		case vLog := <-logs:
-			uLog, _ := json.Marshal(vLog)
-			fmt.Println(string(uLog))
+			var IssuedEvent struct {
+				Course string
+				Id     *big.Int
+				Date   string
+			}
+
+			certABI.UnpackIntoInterface(&IssuedEvent, "Issued", vLog.Data)
+			uLog, _ := vLog.MarshalJSON()
+			fmt.Println("Certificate issued!!")
+			fmt.Println("--------------------")
+			fmt.Printf("Course: \033[34m%s\033[0m\n", IssuedEvent.Course)
+			fmt.Printf("ID: \033[34m%d\033[0m\n", IssuedEvent.Id.Int64())
+			fmt.Printf("Date: \033[34m%s\033[0m\n", IssuedEvent.Date)
+			fmt.Printf("Raw log: \033[32m%s\033[0m\n", string(uLog))
+			fmt.Println("--------------------")
 		}
 	}
 }
