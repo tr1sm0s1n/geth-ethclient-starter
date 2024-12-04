@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"example/fe/helpers"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"fmt"
 	"os"
 	"time"

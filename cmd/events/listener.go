@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"example/fe/contract"
-	"example/fe/helpers"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"fmt"
 	"math/big"
 	"os"

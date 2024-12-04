@@ -1,4 +1,4 @@
-module example/fe
+module github.com/tr1sm0s1n/geth-ethclient-starter
 
 go 1.23.2
 
