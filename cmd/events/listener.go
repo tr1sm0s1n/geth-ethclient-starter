@@ -2,10 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
 	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
-	"fmt"
-	"math/big"
 	"os"
 	"strings"
 
@@ -46,11 +45,7 @@ func main() {
 		case err := <-sub.Err():
 			panic(err)
 		case vLog := <-logs:
-			var IssuedEvent struct {
-				Course string
-				Id     *big.Int
-				Date   string
-			}
+			var IssuedEvent contract.CertIssued
 
 			certABI.UnpackIntoInterface(&IssuedEvent, "Issued", vLog.Data)
 			uLog, _ := vLog.MarshalJSON()
