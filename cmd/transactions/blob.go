@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"fmt"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"os"
 	"time"
 

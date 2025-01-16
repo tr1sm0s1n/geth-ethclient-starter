@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
 	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
-	"fmt"
 	"math/big"
 	"os"
 	"time"
