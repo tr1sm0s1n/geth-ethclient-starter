@@ -3,15 +3,14 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
-	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"os"
-	"time"
 
-	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind/v2"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 )
 
 func main() {
@@ -25,27 +24,6 @@ func main() {
 		panic(err)
 	}
 
-	for {
-		_, pending, err := client.TransactionByHash(context.Background(), trx.Hash())
-		if err != nil {
-			if err == ethereum.NotFound {
-				time.Sleep(time.Second)
-				continue
-			} else {
-				panic(err)
-			}
-		}
-
-		if !pending {
-			fmt.Println("Transaction has been committed!!")
-			fmt.Println("--------------------------------")
-			break
-		}
-
-		fmt.Println("Transaction is pending...")
-		time.Sleep(time.Second)
-	}
-
 	fmt.Printf("Contract Address: \033[32m%s\033[0m\n", contractAddress.String())
 	fmt.Println("-----------------")
 	fmt.Printf("Transaction Hash: \033[32m%s\033[0m\n", trx.Hash())
@@ -57,6 +35,16 @@ func deployContract(client *ethclient.Client) (common.Address, *types.Transactio
 	if err != nil {
 		return common.Address{}, nil, err
 	}
-	contract, transaction, _, err := contract.DeployCert(auth, client)
-	return contract, transaction, err
+
+	deployParams := bind.DeploymentParams{
+		Contracts: []*bind.MetaData{&contract.CertMetaData},
+	}
+
+	deployer := bind.DefaultDeployer(auth, client)
+	result, err := bind.LinkAndDeploy(&deployParams, deployer)
+
+	if _, err := bind.WaitDeployed(context.Background(), client, result.Txs[contract.CertMetaData.ID].Hash()); err != nil {
+		return common.Address{}, nil, err
+	}
+	return result.Addresses[contract.CertMetaData.ID], result.Txs[contract.CertMetaData.ID], err
 }

@@ -46,7 +46,7 @@ go install github.com/ethereum/go-ethereum/cmd/abigen@latest
 Generate Go binding for the contract:
 
 ```bash
-abigen --bin contract/output/Cert/Cert.bin --abi contract/output/Cert/Cert_abi.json --pkg contract --type Cert --out contract/Cert.go
+abigen --v2 --bin contract/output/Cert/Cert.bin --abi contract/output/Cert/Cert_abi.json --pkg contract --type Cert --out contract/Cert.go
 ```
 
 Deploy the contract:

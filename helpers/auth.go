@@ -6,7 +6,7 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind/v2"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 )
@@ -40,11 +40,7 @@ func AuthGenerator(client *ethclient.Client, key string) (*bind.TransactOpts, *e
 		return nil, nil, err
 	}
 
-	auth, err := bind.NewKeyedTransactorWithChainID(privateKey, chainID)
-	if err != nil {
-		return nil, nil, err
-	}
-
+	auth := bind.NewKeyedTransactor(privateKey, chainID)
 	auth.Nonce = big.NewInt(int64(nonce))
 	auth.Value = big.NewInt(0)
 	auth.GasLimit = gasLimit
