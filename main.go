@@ -3,13 +3,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
-	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
 	"math/big"
 	"os"
 	"time"
 
+	"github.com/tr1sm0s1n/geth-ethclient-starter/contract"
+	"github.com/tr1sm0s1n/geth-ethclient-starter/helpers"
+
 	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind/v2"
 	"github.com/ethereum/go-ethereum/common"
 )
 
@@ -35,10 +37,8 @@ func main() {
 		panic(err)
 	}
 
-	instance, err := contract.NewCert(contractAddress, client)
-	if err != nil {
-		panic(err)
-	}
+	cert := contract.NewCert()
+	instance := cert.Instance(client, contractAddress)
 
 	fmt.Println("Enter student details:")
 	fmt.Println("----------------------")
@@ -53,7 +53,7 @@ func main() {
 	fmt.Print("Date: ")
 	fmt.Scanln(&certificate.date)
 
-	trx, err := instance.IssueCertificate(auth, &id, certificate.name, certificate.course, certificate.grade, certificate.date)
+	trx, err := bind.Transact(instance, auth, cert.PackIssueCertificate(&id, certificate.name, certificate.course, certificate.grade, certificate.date))
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +85,7 @@ func main() {
 	fmt.Print("\nEnter ID to fetch: ")
 	fmt.Scanln(&id)
 
-	c, err := instance.FetchCertificate(nil, &id)
+	c, err := bind.Call(instance, nil, cert.PackFetchCertificate(&id), cert.UnpackFetchCertificate)
 	if err != nil {
 		panic(err)
 	}
