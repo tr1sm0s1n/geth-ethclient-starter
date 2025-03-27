@@ -17,16 +17,14 @@ func main() {
 
 	contractAddress := common.HexToAddress(os.Getenv("CONTRACT_ADDRESS"))
 
-	filterer, err := contract.NewCertFilterer(contractAddress, client)
-	if err != nil {
-		panic(err)
-	}
+	cert := contract.NewCert()
+	instance := cert.Instance(client, contractAddress)
 
-	logs := make(chan *contract.CertIssued)
-	sub, err := filterer.WatchIssued(nil, logs)
+	logs, sub, err := instance.WatchLogs(nil, "Issued")
 	if err != nil {
 		panic(err)
 	}
+	defer sub.Unsubscribe()
 
 	fmt.Println("Listening for events...")
 	fmt.Println("-----------------------")
@@ -36,12 +34,16 @@ func main() {
 		case err := <-sub.Err():
 			panic(err)
 		case log := <-logs:
-			rw, _ := log.Raw.MarshalJSON()
+			event := new(contract.CertIssued)
+			if err := instance.UnpackLog(event, "Issued", log); err != nil {
+				panic(err)
+			}
+			rw, _ := log.MarshalJSON()
 			fmt.Println("Certificate issued!!")
 			fmt.Println("--------------------")
-			fmt.Printf("Course: \033[34m%s\033[0m\n", log.Course)
-			fmt.Printf("ID: \033[34m%d\033[0m\n", log.Id.Int64())
-			fmt.Printf("Date: \033[34m%s\033[0m\n", log.Date)
+			fmt.Printf("Course: \033[34m%s\033[0m\n", event.Course)
+			fmt.Printf("ID: \033[34m%d\033[0m\n", event.Id.Int64())
+			fmt.Printf("Date: \033[34m%s\033[0m\n", event.Date)
 			fmt.Printf("Raw log: \033[32m%s\033[0m\n", string(rw))
 			fmt.Println("--------------------")
 		}
