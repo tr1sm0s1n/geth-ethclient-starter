@@ -34,11 +34,11 @@ func main() {
 		case err := <-sub.Err():
 			panic(err)
 		case log := <-logs:
-			event := new(contract.CertIssued)
-			if err := instance.UnpackLog(event, "Issued", log); err != nil {
+			event, err := cert.UnpackIssuedEvent(&log)
+			if err != nil {
 				panic(err)
 			}
-			rw, _ := log.MarshalJSON()
+			rw, _ := event.Raw.MarshalJSON()
 			fmt.Println("Certificate issued!!")
 			fmt.Println("--------------------")
 			fmt.Printf("Course: \033[34m%s\033[0m\n", event.Course)
